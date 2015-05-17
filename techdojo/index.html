@@ -1,0 +1,122 @@
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.6.0/annyang.min.js"></script>
+
+<script>
+if (annyang) {
+  // Let's define our first command. First the text we expect, and then the function it should call
+  var map;
+var infowindow;
+var rad;
+var plc;
+var usr;
+var lat;
+var lng;
+var userData = ['Tom',23.752805,90.375433,500,'Jane',23.755790,90.387363,400,'Dave',23.765138, 90.362601,450,'Sarah',23.792452, 90.416696,600,
+'John',23.863064, 90.400126,640
+];
+  var commands = {
+    'find :place near :user': function(place,user) {
+      plc=place;
+      usr=user;
+      if(usr=='Tom')
+      { 
+      	lat=23.752805;
+      	lng=90.375433;
+  
+  			rad =500;
+  			initialize();
+
+  		}
+  		else if(usr=='John')
+  		{
+  			lat=23.863064;
+  			lng=90.400126;
+  			rad =640;
+  			initialize();
+  		}
+  
+  		else if(usr=='Jane')
+  		{
+  		lat=23.755790;
+  		lng=90.387363;
+  		rad =400;
+  		initialize();
+  		}
+  		else if(usr=='Dave')
+  		{
+  		lat=23.765138; 
+  		lng=90.362601;
+  		rad =450;
+  		initialize();
+  		}
+  		else if(usr=='Sarah')
+  		{
+  		lat=23.792452; 
+  		lng=90.416696;
+  		rad =600;
+  		initialize();
+  		}
+  		
+    }
+  };
+var map;
+var infowindow;
+
+function initialize() {
+  var pyrmont = new google.maps.LatLng(lat, lng);
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), {
+    center: pyrmont,
+    zoom: 15
+  });
+
+  var request = {
+    location: pyrmont,
+    radius: rad,
+    types: [plc]
+  };
+  infowindow = new google.maps.InfoWindow();
+  var service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, callback);
+}
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+  // Add our commands to annyang
+  annyang.addCommands(commands);
+
+  
+  function startannyang(){
+  // Start listening. You can call this here, or attach this call to an event, button, etc.
+  annyang.start();
+  }
+
+
+
+}
+</script>
+
+<html>
+    <center><input type="button" value="Start Voice Input" onclick="startannyang();"></center>
+	<div id="map-canvas"></div>
+</html>
