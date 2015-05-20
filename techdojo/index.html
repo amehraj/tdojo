@@ -1,66 +1,91 @@
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.6.0/annyang.min.js"></script>
-
-<script>
-if (annyang) {
-  // Let's define our first command. First the text we expect, and then the function it should call
-  var map;
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Techdojo Coding Assignment</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.6.0/annyang.min.js"></script>
+    <script>
+var map;
 var infowindow;
-var rad;
 var plc;
-var usr;
 var lat;
 var lng;
+var rad;
+var usr;
 var userData = ['Tom',23.752805,90.375433,500,'Jane',23.755790,90.387363,400,'Dave',23.765138, 90.362601,450,'Sarah',23.792452, 90.416696,600,
 'John',23.863064, 90.400126,640
 ];
+
+if (annyang) {
+  // Let's define our first command. First the text we expect, and then the function it should call
   var commands = {
-    'find :place near :user': function(place,user) {
-      plc=place;
+    'find :area near :user': function(area,user) {
+      alert(area+user);
+
+      plc=area;
       usr=user;
       if(usr=='Tom')
       { 
-      	lat=23.752805;
-      	lng=90.375433;
+        lat=23.752805;
+        lng=90.375433;
   
-  			rad =500;
-  			initialize();
+        rad =500;
+        initialize();
 
-  		}
-  		else if(usr=='John')
-  		{
-  			lat=23.863064;
-  			lng=90.400126;
-  			rad =640;
-  			initialize();
-  		}
+      }
+      else if(usr=='John')
+      {
+        lat=23.863064;
+        lng=90.400126;
+        rad =640;
+        initialize();
+      }
   
-  		else if(usr=='Jane')
-  		{
-  		lat=23.755790;
-  		lng=90.387363;
-  		rad =400;
-  		initialize();
-  		}
-  		else if(usr=='Dave')
-  		{
-  		lat=23.765138; 
-  		lng=90.362601;
-  		rad =450;
-  		initialize();
-  		}
-  		else if(usr=='Sarah')
-  		{
-  		lat=23.792452; 
-  		lng=90.416696;
-  		rad =600;
-  		initialize();
-  		}
-  		
+      else if(usr=='Jane')
+      {
+      lat=23.755790;
+      lng=90.387363;
+      rad =400;
+      initialize();
+      }
+      else if(usr=='Dave')
+      {
+      lat=23.765138; 
+      lng=90.362601;
+      rad =450;
+      initialize();
+      }
+      else if(usr=='Sarah')
+      {
+      lat=23.792452; 
+      lng=90.416696;
+      rad =600;
+      initialize();
+      }
+
+      
     }
   };
-var map;
-var infowindow;
+
+  // Add our commands to annyang
+  annyang.addCommands(commands);
+  function startannyang(){
+  // Start listening. You can call this here, or attach this call to an event, button, etc.
+  annyang.start();
+  }
+
+}
+
+
 
 function initialize() {
   var pyrmont = new google.maps.LatLng(lat, lng);
@@ -102,21 +127,12 @@ function createMarker(place) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-  // Add our commands to annyang
-  annyang.addCommands(commands);
 
-  
-  function startannyang(){
-  // Start listening. You can call this here, or attach this call to an event, button, etc.
-  annyang.start();
-  }
-
-
-
-}
-</script>
-
-<html>
+    </script>
+  </head>
+  <body>
     <center><input type="button" value="Start Voice Input" onclick="startannyang();"></center>
-	<div id="map-canvas"></div>
+
+    <div id="map-canvas"></div>
+  </body>
 </html>
